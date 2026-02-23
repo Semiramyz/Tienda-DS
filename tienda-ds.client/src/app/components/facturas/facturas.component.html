@@ -1,0 +1,39 @@
+<div class="facturas-container">
+  <h2>Gestión de Facturas</h2>
+
+  <div *ngIf="loading" class="loading">
+    <p>Cargando facturas...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <button class="btn-primary" routerLink="/facturas/nuevo">Nueva Factura</button>
+
+    <table *ngIf="facturas.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Número de Factura</th>
+          <th>Fecha Emisión</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let factura of facturas">
+          <td>{{ factura.idFactura }}</td>
+          <td>{{ factura.nroFactura }}</td>
+          <td>{{ factura.fechaEmision | date }}</td>
+          <td>
+            <button routerLink="/facturas/detalle/{{ factura.idFactura }}">Ver</button>
+            <button (click)="deleteFactura(factura.idFactura)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="facturas.length === 0">No hay facturas registradas.</p>
+  </div>
+</div>

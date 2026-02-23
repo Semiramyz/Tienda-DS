@@ -1,0 +1,39 @@
+<div class="proveedores-container">
+  <h2>Gestión de Proveedores</h2>
+
+  <div *ngIf="loading" class="loading">
+    <p>Cargando proveedores...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <button class="btn-primary" routerLink="/proveedores/nuevo">Nuevo Proveedor</button>
+
+    <table *ngIf="proveedores.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Empresa</th>
+          <th>Contacto</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let proveedor of proveedores">
+          <td>{{ proveedor.idProveedor }}</td>
+          <td>{{ proveedor.empresa }}</td>
+          <td>{{ proveedor.contacto }}</td>
+          <td>
+            <button routerLink="/proveedores/editar/{{ proveedor.idProveedor }}">Editar</button>
+            <button (click)="deleteProveedor(proveedor.idProveedor)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="proveedores.length === 0">No hay proveedores registrados.</p>
+  </div>
+</div>

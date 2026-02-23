@@ -1,0 +1,41 @@
+<div class="ventas-container">
+  <h2>Gestión de Ventas</h2>
+
+  <div *ngIf="loading" class="loading">
+    <p>Cargando ventas...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <button class="btn-primary" routerLink="/ventas/nuevo">Nueva Venta</button>
+
+    <table *ngIf="ventas.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Cantidad</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let venta of ventas">
+          <td>{{ venta.idVenta }}</td>
+          <td>{{ venta.fecha | date }}</td>
+          <td>{{ venta.cantidad }}</td>
+          <td>{{ venta.totalVenta | currency }}</td>
+          <td>
+            <button routerLink="/ventas/detalle/{{ venta.idVenta }}">Ver</button>
+            <button (click)="deleteVenta(venta.idVenta)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="ventas.length === 0">No hay ventas registradas.</p>
+  </div>
+</div>

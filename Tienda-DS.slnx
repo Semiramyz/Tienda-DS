@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="tienda-ds.client/tienda-ds.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="Tienda-DS.Server/Tienda-DS.Server.csproj" />
+</Solution>

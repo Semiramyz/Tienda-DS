@@ -1,0 +1,43 @@
+<div class="productos-container">
+  <h2>Gestión de Productos</h2>
+
+  <div *ngIf="loading" class="loading">
+    <p>Cargando productos...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <button class="btn-primary" routerLink="/productos/nuevo">Nuevo Producto</button>
+
+    <table *ngIf="productos.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Precio Venta</th>
+          <th>Precio Compra</th>
+          <th>Stock</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <td>{{ producto.idProducto }}</td>
+          <td>{{ producto.nombreProd }}</td>
+          <td>{{ producto.precioVenta | currency }}</td>
+          <td>{{ producto.precioCompra | currency }}</td>
+          <td>{{ producto.stock }}</td>
+          <td>
+            <button routerLink="/productos/editar/{{ producto.idProducto }}">Editar</button>
+            <button (click)="deleteProducto(producto.idProducto)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="productos.length === 0">No hay productos registrados.</p>
+  </div>
+</div>

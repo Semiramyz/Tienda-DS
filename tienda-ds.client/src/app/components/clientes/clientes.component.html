@@ -1,0 +1,39 @@
+<div class="clientes-container">
+  <h2>Gestión de Clientes</h2>
+
+  <div *ngIf="loading" class="loading">
+    <p>Cargando clientes...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <button class="btn-primary" routerLink="/clientes/nuevo">Nuevo Cliente</button>
+
+    <table *ngIf="clientes.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>NIT/Cédula</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientes">
+          <td>{{ cliente.idCliente }}</td>
+          <td>{{ cliente.nombre }}</td>
+          <td>{{ cliente.nitCedula }}</td>
+          <td>
+            <button routerLink="/clientes/editar/{{ cliente.idCliente }}">Editar</button>
+            <button (click)="deleteCliente(cliente.idCliente)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="clientes.length === 0">No hay clientes registrados.</p>
+  </div>
+</div>

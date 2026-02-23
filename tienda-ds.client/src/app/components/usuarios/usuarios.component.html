@@ -1,0 +1,39 @@
+<div class="usuarios-container">
+  <h2>Gestión de Usuarios</h2>
+
+  <div *ngIf="loading" class="loading">
+    <p>Cargando usuarios...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <button class="btn-primary" routerLink="/usuarios/nuevo">Nuevo Usuario</button>
+
+    <table *ngIf="usuarios.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre de Usuario</th>
+          <th>Rol</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.idUsuario }}</td>
+          <td>{{ usuario.nombreUsuario }}</td>
+          <td>{{ usuario.rol }}</td>
+          <td>
+            <button routerLink="/usuarios/editar/{{ usuario.idUsuario }}">Editar</button>
+            <button (click)="deleteUsuario(usuario.idUsuario)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="usuarios.length === 0">No hay usuarios registrados.</p>
+  </div>
+</div>

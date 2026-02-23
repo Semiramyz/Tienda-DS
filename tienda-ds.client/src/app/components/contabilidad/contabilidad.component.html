@@ -1,0 +1,43 @@
+<div class="contabilidad-container">
+  <h2>Gestión de Contabilidad</h2>
+
+  <div *ngIf="loading" class="loading">
+    <p>Cargando registros contables...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <button class="btn-primary" routerLink="/contabilidad/nuevo">Nuevo Registro</button>
+
+    <table *ngIf="registros.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tipo</th>
+          <th>Monto</th>
+          <th>Descripción</th>
+          <th>Fecha Contable</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let registro of registros">
+          <td>{{ registro.idRegistro }}</td>
+          <td>{{ registro.tipo }}</td>
+          <td>{{ registro.monto | currency }}</td>
+          <td>{{ registro.descripcion }}</td>
+          <td>{{ registro.fechaContable | date }}</td>
+          <td>
+            <button routerLink="/contabilidad/detalle/{{ registro.idRegistro }}">Ver</button>
+            <button (click)="deleteRegistro(registro.idRegistro)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="registros.length === 0">No hay registros contables.</p>
+  </div>
+</div>
