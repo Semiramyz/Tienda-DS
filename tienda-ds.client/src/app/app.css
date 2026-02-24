@@ -43,9 +43,11 @@ nav ul li a {
     display: block;
     border-radius: 4px;
     transition: background-color 0.3s;
+    cursor: pointer;
 }
 
-nav ul li a:hover {
+nav ul li a:hover,
+nav ul li a.active {
     background-color: #555;
 }
 
