@@ -27,9 +27,6 @@ import { ContabilidadComponent } from './components/contabilidad/contabilidad.co
     ContabilidadComponent
   ],
   imports: [
-    BrowserModule,
-    CommonModule,
-    HttpClientModule,
     AppRoutingModule
   ],
   providers: [
