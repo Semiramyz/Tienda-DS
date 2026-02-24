@@ -1,10 +1,4 @@
-
-interface WeatherForecast {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
-}
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +8,4 @@ interface WeatherForecast {
 })
 export class App {
   title = 'Sistema de Gestión de Tienda';
-  }
-
-  protected readonly title = signal('tienda-ds.client');
 }

@@ -5,7 +5,8 @@ import { FacturaService } from '../../services/factura.service';
 @Component({
   selector: 'app-facturas',
   templateUrl: './facturas.component.html',
-  styleUrls: ['./facturas.component.css']
+  styleUrls: ['./facturas.component.css'],
+  standalone: false
 })
 export class FacturasComponent implements OnInit {
   facturas: Factura[] = [];

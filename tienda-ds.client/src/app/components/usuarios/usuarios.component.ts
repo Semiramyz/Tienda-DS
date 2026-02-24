@@ -5,7 +5,8 @@ import { UsuarioService } from '../../services/usuario.service';
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css']
+  styleUrls: ['./usuarios.component.css'],
+  standalone: false
 })
 export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];

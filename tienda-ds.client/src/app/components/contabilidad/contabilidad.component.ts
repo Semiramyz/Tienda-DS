@@ -5,7 +5,8 @@ import { ContabilidadService } from '../../services/contabilidad.service';
 @Component({
   selector: 'app-contabilidad',
   templateUrl: './contabilidad.component.html',
-  styleUrls: ['./contabilidad.component.css']
+  styleUrls: ['./contabilidad.component.css'],
+  standalone: false
 })
 export class ContabilidadComponent implements OnInit {
   registros: Contabilidad[] = [];

@@ -5,7 +5,8 @@ import { ProveedorService } from '../../services/proveedor.service';
 @Component({
   selector: 'app-proveedores',
   templateUrl: './proveedores.component.html',
-  styleUrls: ['./proveedores.component.css']
+  styleUrls: ['./proveedores.component.css'],
+  standalone: false
 })
 export class ProveedoresComponent implements OnInit {
   proveedores: Proveedor[] = [];
