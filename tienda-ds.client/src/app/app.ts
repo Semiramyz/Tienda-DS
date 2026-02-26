@@ -8,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class App {
   title = 'Sistema de Gestión de Tienda';
+  sidebarOpen = true;
+
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
 }

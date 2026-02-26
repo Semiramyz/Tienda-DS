@@ -1,5 +1,5 @@
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import { NgModule, provideZoneChangeDetection, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -40,11 +40,12 @@ import { ContabilidadComponent } from './components/contabilidad/contabilidad.co
   imports: [
     BrowserModule,
     CommonModule,
-    HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule
   ],
   providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
   ],
   bootstrap: [App]

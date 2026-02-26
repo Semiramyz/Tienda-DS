@@ -6,4 +6,7 @@ export interface Venta {
   IdProducto?: number;
   Cantidad: number;
   TotalVenta: number;
+  NombreVendedor?: string;
+  NombreCliente?: string;
+  NombreProducto?: string;
 }

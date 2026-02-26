@@ -1,7 +1,7 @@
 <div class="proveedores-container">
   <h2>Gestión de Proveedores</h2>
 
-  <button class="btn-primary" routerLink="/proveedores/nuevo">Nuevo Proveedor</button>
+  <a class="btn-primary" routerLink="/proveedores/nuevo">Nuevo Proveedor</a>
 
   <p *ngIf="loading && proveedores.length === 0" class="loading">Cargando proveedores...</p>
 
@@ -25,7 +25,7 @@
         <td>{{ proveedor.Empresa }}</td>
         <td>{{ proveedor.Contacto }}</td>
         <td>
-          <button class="btn-edit" [routerLink]="['/proveedores/editar', proveedor.IdProveedor]">Editar</button>
+          <a class="btn-edit" [routerLink]="['/proveedores/editar', proveedor.IdProveedor]">Editar</a>
           <button class="btn-delete" (click)="deleteProveedor(proveedor.IdProveedor)">Eliminar</button>
         </td>
       </tr>

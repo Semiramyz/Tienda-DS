@@ -1,7 +1,7 @@
 <div class="usuarios-container">
   <h2>Gestión de Usuarios</h2>
 
-  <button class="btn-primary" routerLink="/usuarios/nuevo">Nuevo Usuario</button>
+  <a class="btn-primary" routerLink="/usuarios/nuevo">Nuevo Usuario</a>
 
   <p *ngIf="loading && usuarios.length === 0" class="loading">Cargando usuarios...</p>
 
@@ -25,7 +25,7 @@
         <td>{{ usuario.NombreUsuario }}</td>
         <td>{{ usuario.Rol }}</td>
         <td>
-          <button class="btn-edit" [routerLink]="['/usuarios/editar', usuario.IdUsuario]">Editar</button>
+          <a class="btn-edit" [routerLink]="['/usuarios/editar', usuario.IdUsuario]">Editar</a>
           <button class="btn-delete" (click)="deleteUsuario(usuario.IdUsuario)">Eliminar</button>
         </td>
       </tr>

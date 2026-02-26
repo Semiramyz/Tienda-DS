@@ -1,112 +1,77 @@
 <div class="form-container">
   <h2>{{ isEditMode ? 'Editar Venta' : 'Nueva Venta' }}</h2>
 
-  <div *ngIf="loading" class="loading">Cargando...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
 
-  <form [formGroup]="ventaForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+  <form [formGroup]="ventaForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="Fecha">Fecha *</label>
-      <input
-        type="date"
-        id="Fecha"
-        formControlName="Fecha"
-        class="form-control"
-        [class.invalid]="ventaForm.get('Fecha')?.invalid && ventaForm.get('Fecha')?.touched"
-      />
-      <div class="error-message" *ngIf="ventaForm.get('Fecha')?.invalid && ventaForm.get('Fecha')?.touched">
-        <span *ngIf="ventaForm.get('Fecha')?.errors?.['required']">La fecha es requerida</span>
-      </div>
+      <input type="date" id="Fecha" formControlName="Fecha" class="form-control"
+        [class.invalid]="ventaForm.get('Fecha')?.invalid && ventaForm.get('Fecha')?.touched" />
     </div>
 
     <div class="form-group">
       <label for="IdUsuario">Vendedor *</label>
-      <select
-        id="IdUsuario"
-        formControlName="IdUsuario"
-        class="form-control"
-        [class.invalid]="ventaForm.get('IdUsuario')?.invalid && ventaForm.get('IdUsuario')?.touched"
-      >
+      <select id="IdUsuario" formControlName="IdUsuario" class="form-control"
+        [class.invalid]="ventaForm.get('IdUsuario')?.invalid && ventaForm.get('IdUsuario')?.touched">
         <option value="">Seleccione un vendedor</option>
         <option *ngFor="let usuario of usuarios" [value]="usuario.IdUsuario">
           {{ usuario.NombreUsuario }} ({{ usuario.Rol }})
         </option>
       </select>
       <div class="error-message" *ngIf="ventaForm.get('IdUsuario')?.invalid && ventaForm.get('IdUsuario')?.touched">
-        <span *ngIf="ventaForm.get('IdUsuario')?.errors?.['required']">Debe seleccionar un vendedor</span>
+        <span>Debe seleccionar un vendedor</span>
       </div>
     </div>
 
     <div class="form-group">
       <label for="IdCliente">Cliente *</label>
-      <select
-        id="IdCliente"
-        formControlName="IdCliente"
-        class="form-control"
-        [class.invalid]="ventaForm.get('IdCliente')?.invalid && ventaForm.get('IdCliente')?.touched"
-      >
+      <select id="IdCliente" formControlName="IdCliente" class="form-control"
+        [class.invalid]="ventaForm.get('IdCliente')?.invalid && ventaForm.get('IdCliente')?.touched">
         <option value="">Seleccione un cliente</option>
         <option *ngFor="let cliente of clientes" [value]="cliente.IdCliente">
           {{ cliente.Nombre }} - {{ cliente.NitCedula }}
         </option>
       </select>
       <div class="error-message" *ngIf="ventaForm.get('IdCliente')?.invalid && ventaForm.get('IdCliente')?.touched">
-        <span *ngIf="ventaForm.get('IdCliente')?.errors?.['required']">Debe seleccionar un cliente</span>
+        <span>Debe seleccionar un cliente</span>
       </div>
-      <small>Si no hay clientes disponibles, primero cree uno en la sección de Clientes</small>
     </div>
 
     <div class="form-group">
       <label for="IdProducto">Producto *</label>
-      <select
-        id="IdProducto"
-        formControlName="IdProducto"
-        class="form-control"
-        [class.invalid]="ventaForm.get('IdProducto')?.invalid && ventaForm.get('IdProducto')?.touched"
-      >
+      <select id="IdProducto" formControlName="IdProducto" class="form-control"
+        [class.invalid]="ventaForm.get('IdProducto')?.invalid && ventaForm.get('IdProducto')?.touched">
         <option value="">Seleccione un producto</option>
         <option *ngFor="let producto of productos" [value]="producto.IdProducto">
           {{ producto.NombreProd }} - ${{ producto.PrecioVenta }} (Stock: {{ producto.Stock }})
         </option>
       </select>
       <div class="error-message" *ngIf="ventaForm.get('IdProducto')?.invalid && ventaForm.get('IdProducto')?.touched">
-        <span *ngIf="ventaForm.get('IdProducto')?.errors?.['required']">Debe seleccionar un producto</span>
+        <span>Debe seleccionar un producto</span>
       </div>
-      <small>Si no hay productos disponibles, primero cree uno en la sección de Productos</small>
     </div>
 
     <div class="form-row">
       <div class="form-group">
         <label for="Cantidad">Cantidad *</label>
-        <input
-          type="number"
-          id="Cantidad"
-          formControlName="Cantidad"
-          class="form-control"
-          min="1"
-          [class.invalid]="ventaForm.get('Cantidad')?.invalid && ventaForm.get('Cantidad')?.touched"
-        />
+        <input type="number" id="Cantidad" formControlName="Cantidad" class="form-control" min="1"
+          [class.invalid]="ventaForm.get('Cantidad')?.invalid && ventaForm.get('Cantidad')?.touched" />
         <div class="error-message" *ngIf="ventaForm.get('Cantidad')?.invalid && ventaForm.get('Cantidad')?.touched">
-          <span *ngIf="ventaForm.get('Cantidad')?.errors?.['required']">La cantidad es requerida</span>
           <span *ngIf="ventaForm.get('Cantidad')?.errors?.['min']">Debe ser mayor a 0</span>
         </div>
+        <small *ngIf="selectedProducto">Stock disponible: {{ selectedProducto.Stock }}</small>
       </div>
 
       <div class="form-group">
         <label for="TotalVenta">Total</label>
-        <input
-          type="text"
-          id="TotalVenta"
-          formControlName="TotalVenta"
-          class="form-control total"
-          readonly
-        />
+        <input type="text" id="TotalVenta" formControlName="TotalVenta" class="form-control total" readonly />
       </div>
     </div>
 
     <div class="form-actions">
       <button type="submit" class="btn btn-primary" [disabled]="loading">
-        {{ isEditMode ? 'Actualizar' : 'Registrar Venta' }}
+        {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Registrar Venta') }}
       </button>
       <button type="button" class="btn btn-secondary" (click)="onCancel()">
         Cancelar

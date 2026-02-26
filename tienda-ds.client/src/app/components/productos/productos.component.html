@@ -2,7 +2,7 @@
   <h2>Gestión de Productos</h2>
 
   <div class="actions-bar">
-    <button class="btn-primary" routerLink="/productos/nuevo">Nuevo Producto</button>
+    <a class="btn-primary" routerLink="/productos/nuevo">Nuevo Producto</a>
     <button class="btn-primary" (click)="toggleInventario()">
       {{ showInventario ? '📋 Ver Lista' : '📊 Inventario' }}
     </button>
@@ -35,7 +35,7 @@
         <td>{{ producto.PrecioCompra | currency }}</td>
         <td>{{ producto.Stock }}</td>
         <td>
-          <button class="btn-edit" [routerLink]="['/productos/editar', producto.IdProducto]">Editar</button>
+          <a class="btn-edit" [routerLink]="['/productos/editar', producto.IdProducto]">Editar</a>
           <button class="btn-delete" (click)="deleteProducto(producto.IdProducto)">Eliminar</button>
         </td>
       </tr>

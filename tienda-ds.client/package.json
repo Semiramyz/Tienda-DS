@@ -35,7 +35,8 @@
     "jest-editor-support": "*",
     "run-script-os": "*",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zone.js": "^0.16.1"
   },
   "devDependencies": {
     "@angular/build": "^21.1.5",

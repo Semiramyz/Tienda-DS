@@ -1,42 +1,44 @@
 <div class="ventas-container">
   <h2>Gestión de Ventas</h2>
 
-  <div *ngIf="loading" class="loading">
-    <p>Cargando ventas...</p>
-  </div>
+  <a class="btn-primary" routerLink="/ventas/nuevo">Nueva Venta</a>
+
+  <p *ngIf="loading && ventas.length === 0" class="loading">Cargando ventas...</p>
 
   <div *ngIf="error" class="error">
     <p>{{ error }}</p>
+    <button class="btn-primary" (click)="loadVentas()">Reintentar</button>
   </div>
 
-  <div *ngIf="!loading && !error">
-    <button class="btn-primary" routerLink="/ventas/nuevo">Nueva Venta</button>
+  <table *ngIf="ventas.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Vendedor</th>
+        <th>Cliente</th>
+        <th>Producto</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let venta of ventas">
+        <td>{{ venta.IdVenta }}</td>
+        <td>{{ venta.Fecha | date:'dd/MM/yyyy' }}</td>
+        <td>{{ venta.NombreVendedor || '-' }}</td>
+        <td>{{ venta.NombreCliente || '-' }}</td>
+        <td>{{ venta.NombreProducto || '-' }}</td>
+        <td>{{ venta.Cantidad }}</td>
+        <td>{{ venta.TotalVenta | currency }}</td>
+        <td>
+          <a class="btn-edit" [routerLink]="['/ventas/editar', venta.IdVenta]">Editar</a>
+          <button class="btn-delete" (click)="deleteVenta(venta.IdVenta)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <table *ngIf="ventas.length > 0">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Fecha</th>
-          <th>Cantidad</th>
-          <th>Total</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let venta of ventas">
-          <td>{{ venta.IdVenta }}</td>
-          <td>{{ venta.Fecha | date }}</td>
-          <td>{{ venta.Cantidad }}</td>
-          <td>{{ venta.TotalVenta | currency }}</td>
-          <td>
-            <button class="btn-view" [routerLink]="['/ventas/detalle', venta.IdVenta]">Ver</button>
-            <button class="btn-edit" [routerLink]="['/ventas/editar', venta.IdVenta]">Editar</button>
-            <button class="btn-delete" (click)="deleteVenta(venta.IdVenta)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p *ngIf="ventas.length === 0">No hay ventas registradas.</p>
-  </div>
+  <p *ngIf="!loading && !error && ventas.length === 0">No hay ventas registradas.</p>
 </div>

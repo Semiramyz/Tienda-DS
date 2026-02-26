@@ -1,9 +1,12 @@
   <div class="app-layout">
-    <aside class="sidebar">
+    <aside class="sidebar" [class.collapsed]="!sidebarOpen">
       <div class="sidebar-header">
-        <h2>🛍️ Tienda DS</h2>
+        <h2 *ngIf="sidebarOpen">🛍️ Tienda DS</h2>
+        <button class="toggle-btn" (click)="toggleSidebar()">
+          {{ sidebarOpen ? '✕' : '☰' }}
+        </button>
       </div>
-      <nav>
+      <nav *ngIf="sidebarOpen">
         <ul>
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">🏠 Inicio</a></li>
           <li><a routerLink="/productos" routerLinkActive="active">📦 Productos</a></li>

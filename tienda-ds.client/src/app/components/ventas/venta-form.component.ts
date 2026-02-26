@@ -92,7 +92,7 @@ export class VentaFormComponent implements OnInit {
   loadUsuarios(): void {
     this.usuarioService.getAll().subscribe({
       next: (usuarios) => {
-        this.usuarios = usuarios.filter(u => u.Rol === 'Vendedor' || u.Rol === 'Admin');
+        this.usuarios = usuarios.filter(u => u.Rol === 'vendedor' || u.Rol === 'admin');
       },
       error: (err) => {
         console.error('Error al cargar usuarios', err);

@@ -1,7 +1,7 @@
 <div class="clientes-container">
   <h2>Gestión de Clientes</h2>
 
-  <button class="btn-primary" routerLink="/clientes/nuevo">Nuevo Cliente</button>
+  <a class="btn-primary" routerLink="/clientes/nuevo">Nuevo Cliente</a>
 
   <p *ngIf="loading && clientes.length === 0" class="loading">Cargando clientes...</p>
 
@@ -25,7 +25,7 @@
         <td>{{ cliente.Nombre }}</td>
         <td>{{ cliente.NitCedula }}</td>
         <td>
-          <button class="btn-edit" [routerLink]="['/clientes/editar', cliente.IdCliente]">Editar</button>
+          <a class="btn-edit" [routerLink]="['/clientes/editar', cliente.IdCliente]">Editar</a>
           <button class="btn-delete" (click)="deleteCliente(cliente.IdCliente)">Eliminar</button>
         </td>
       </tr>

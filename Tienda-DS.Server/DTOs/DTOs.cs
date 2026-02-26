@@ -43,5 +43,8 @@ namespace Tienda_DS.Server.DTOs
         public int? IdProducto { get; set; }
         public int Cantidad { get; set; }
         public decimal TotalVenta { get; set; }
+        public string? NombreVendedor { get; set; }
+        public string? NombreCliente { get; set; }
+        public string? NombreProducto { get; set; }
     }
 }

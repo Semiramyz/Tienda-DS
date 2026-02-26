@@ -28,7 +28,10 @@ namespace Tienda_DS.Server.Controllers
                     IdCliente = v.IdCliente,
                     IdProducto = v.IdProducto,
                     Cantidad = v.Cantidad,
-                    TotalVenta = v.TotalVenta
+                    TotalVenta = v.TotalVenta,
+                    NombreVendedor = v.IdUsuarioNavigation != null ? v.IdUsuarioNavigation.NombreUsuario : null,
+                    NombreCliente = v.IdClienteNavigation != null ? v.IdClienteNavigation.Nombre : null,
+                    NombreProducto = v.IdProductoNavigation != null ? v.IdProductoNavigation.NombreProd : null
                 })
                 .ToListAsync();
 
@@ -60,22 +63,41 @@ namespace Tienda_DS.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<VentaDTO>> PostVenta(VentaDTO ventaDto)
         {
-            var venta = new Ventum
+            try
             {
-                Fecha = ventaDto.Fecha,
-                IdUsuario = ventaDto.IdUsuario,
-                IdCliente = ventaDto.IdCliente,
-                IdProducto = ventaDto.IdProducto,
-                Cantidad = ventaDto.Cantidad,
-                TotalVenta = ventaDto.TotalVenta
-            };
+                // Validar stock si hay producto
+                if (ventaDto.IdProducto.HasValue)
+                {
+                    var producto = await _context.Productos.FindAsync(ventaDto.IdProducto.Value);
+                    if (producto == null)
+                        return BadRequest(new { message = "Producto no encontrado" });
+                    if ((producto.Stock ?? 0) < ventaDto.Cantidad)
+                        return BadRequest(new { message = $"Stock insuficiente. Disponible: {producto.Stock}" });
 
-            _context.Venta.Add(venta);
-            await _context.SaveChangesAsync();
+                    producto.Stock = (producto.Stock ?? 0) - ventaDto.Cantidad;
+                }
 
-            ventaDto.IdVenta = venta.IdVenta;
+                var venta = new Ventum
+                {
+                    Fecha = ventaDto.Fecha ?? DateTime.Now,
+                    IdUsuario = ventaDto.IdUsuario,
+                    IdCliente = ventaDto.IdCliente,
+                    IdProducto = ventaDto.IdProducto,
+                    Cantidad = ventaDto.Cantidad,
+                    TotalVenta = ventaDto.TotalVenta
+                };
 
-            return CreatedAtAction(nameof(GetVenta), new { id = venta.IdVenta }, ventaDto);
+                _context.Venta.Add(venta);
+                await _context.SaveChangesAsync();
+
+                ventaDto.IdVenta = venta.IdVenta;
+
+                return CreatedAtAction(nameof(GetVenta), new { id = venta.IdVenta }, ventaDto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error al crear venta", detail = ex.InnerException?.Message ?? ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
