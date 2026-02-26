@@ -23,12 +23,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes">
-          <td>{{ cliente.idCliente }}</td>
-          <td>{{ cliente.nombre }}</td>
-          <td>{{ cliente.nitCedula }}</td>
+          <td>{{ cliente.IdCliente }}</td>
+          <td>{{ cliente.Nombre }}</td>
+          <td>{{ cliente.NitCedula }}</td>
           <td>
-            <button routerLink="/clientes/editar/{{ cliente.idCliente }}">Editar</button>
-            <button (click)="deleteCliente(cliente.idCliente)">Eliminar</button>
+            <button class="btn-edit" [routerLink]="['/clientes/editar', cliente.IdCliente]">Editar</button>
+            <button class="btn-delete" (click)="deleteCliente(cliente.IdCliente)">Eliminar</button>
           </td>
         </tr>
       </tbody>

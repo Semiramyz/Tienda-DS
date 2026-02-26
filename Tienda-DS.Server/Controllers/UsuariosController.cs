@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tienda_DS.Server.Models;
+using Tienda_DS.Server.DTOs;
 
 namespace Tienda_DS.Server.Controllers
 {
@@ -9,82 +10,173 @@ namespace Tienda_DS.Server.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly TiendaSdContext _context;
+        private readonly ILogger<UsuariosController> _logger;
 
-        public UsuariosController(TiendaSdContext context)
+        public UsuariosController(TiendaSdContext context, ILogger<UsuariosController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+        public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetUsuarios()
         {
-            return await _context.Usuarios.ToListAsync();
+            _logger.LogInformation("GET /api/usuarios - Fetching all users");
+            try
+            {
+                var usuarios = await _context.Usuarios
+                    .Select(u => new UsuarioDTO
+                    {
+                        IdUsuario = u.IdUsuario,
+                        NombreUsuario = u.NombreUsuario,
+                        Password = "", // No enviar password en GET
+                        Rol = u.Rol
+                    })
+                    .ToListAsync();
+
+                _logger.LogInformation($"GET /api/usuarios - Returned {usuarios.Count} users");
+                return usuarios;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching users");
+                return StatusCode(500, new { message = "Internal server error", detail = ex.Message });
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        public async Task<ActionResult<UsuarioDTO>> GetUsuario(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-
-            if (usuario == null)
+            _logger.LogInformation($"GET /api/usuarios/{id}");
+            try
             {
-                return NotFound();
-            }
+                var usuario = await _context.Usuarios.FindAsync(id);
 
-            return usuario;
+                if (usuario == null)
+                {
+                    _logger.LogWarning($"Usuario {id} not found");
+                    return NotFound();
+                }
+
+                return new UsuarioDTO
+                {
+                    IdUsuario = usuario.IdUsuario,
+                    NombreUsuario = usuario.NombreUsuario,
+                    Password = "", // No enviar password en GET
+                    Rol = usuario.Rol
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error fetching user {id}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public async Task<ActionResult<UsuarioDTO>> PostUsuario(UsuarioDTO usuarioDto)
         {
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
+            _logger.LogInformation("POST /api/usuarios - Creating new user");
+            try
+            {
+                // Validar que el rol sea válido
+                var rolesValidos = new[] { "admin", "vendedor", "comprador" };
+                if (!rolesValidos.Contains(usuarioDto.Rol?.ToLower()))
+                {
+                    return BadRequest(new { message = $"Rol inválido '{usuarioDto.Rol}'. Roles válidos: {string.Join(", ", rolesValidos)}" });
+                }
 
-            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.IdUsuario }, usuario);
+                var usuario = new Usuario
+                {
+                    NombreUsuario = usuarioDto.NombreUsuario,
+                    Password = usuarioDto.Password,
+                    Rol = usuarioDto.Rol
+                };
+
+                _context.Usuarios.Add(usuario);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation($"User created with ID: {usuario.IdUsuario}");
+
+                usuarioDto.IdUsuario = usuario.IdUsuario;
+                usuarioDto.Password = "";
+
+                return CreatedAtAction(nameof(GetUsuario), new { id = usuario.IdUsuario }, usuarioDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating user");
+                return StatusCode(500, new { message = "Error al crear usuario", detail = ex.InnerException?.Message ?? ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
+        public async Task<IActionResult> PutUsuario(int id, UsuarioDTO usuarioDto)
         {
-            if (id != usuario.IdUsuario)
+            _logger.LogInformation($"PUT /api/usuarios/{id}");
+
+            if (id != usuarioDto.IdUsuario)
             {
-                return BadRequest();
+                return BadRequest(new { message = "ID mismatch" });
             }
 
-            _context.Entry(usuario).State = EntityState.Modified;
+            var rolesValidos = new[] { "admin", "vendedor", "comprador" };
+            if (!rolesValidos.Contains(usuarioDto.Rol?.ToLower()))
+            {
+                return BadRequest(new { message = $"Rol inválido '{usuarioDto.Rol}'. Roles válidos: {string.Join(", ", rolesValidos)}" });
+            }
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsuarioExists(id))
+                var usuario = await _context.Usuarios.FindAsync(id);
+                if (usuario == null)
                 {
-                    return NotFound();
+                    return NotFound(new { message = $"Usuario {id} no encontrado" });
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                usuario.NombreUsuario = usuarioDto.NombreUsuario;
+                usuario.Rol = usuarioDto.Rol;
+
+                if (!string.IsNullOrEmpty(usuarioDto.Password))
+                {
+                    usuario.Password = usuarioDto.Password;
+                }
+
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"User {id} updated successfully");
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating user {id}");
+                return StatusCode(500, new { message = "Error al actualizar usuario", detail = ex.InnerException?.Message ?? ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
+            _logger.LogInformation($"DELETE /api/usuarios/{id}");
+            try
             {
-                return NotFound();
+                var usuario = await _context.Usuarios.FindAsync(id);
+                if (usuario == null)
+                {
+                    return NotFound(new { message = $"Usuario {id} no encontrado" });
+                }
+
+                _context.Usuarios.Remove(usuario);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"User {id} deleted successfully");
+
+                return NoContent();
             }
-
-            _context.Usuarios.Remove(usuario);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error deleting user {id}");
+                return StatusCode(500, new { message = "Error al eliminar usuario", detail = ex.InnerException?.Message ?? ex.Message });
+            }
         }
 
         private bool UsuarioExists(int id)

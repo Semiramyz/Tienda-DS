@@ -25,14 +25,14 @@
       </thead>
       <tbody>
         <tr *ngFor="let registro of registros">
-          <td>{{ registro.idRegistro }}</td>
-          <td>{{ registro.tipo }}</td>
-          <td>{{ registro.monto | currency }}</td>
-          <td>{{ registro.descripcion }}</td>
-          <td>{{ registro.fechaContable | date }}</td>
+          <td>{{ registro.IdRegistro }}</td>
+          <td>{{ registro.Tipo }}</td>
+          <td>{{ registro.Monto | currency }}</td>
+          <td>{{ registro.Descripcion }}</td>
+          <td>{{ registro.FechaContable | date }}</td>
           <td>
-            <button routerLink="/contabilidad/detalle/{{ registro.idRegistro }}">Ver</button>
-            <button (click)="deleteRegistro(registro.idRegistro)">Eliminar</button>
+            <button routerLink="/contabilidad/detalle/{{ registro.IdRegistro }}">Ver</button>
+            <button (click)="deleteRegistro(registro.IdRegistro)">Eliminar</button>
           </td>
         </tr>
       </tbody>

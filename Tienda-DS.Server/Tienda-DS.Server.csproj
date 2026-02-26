@@ -9,7 +9,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <SpaRoot>..\tienda-ds.client</SpaRoot>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:55320</SpaProxyServerUrl>
+    <SpaProxyServerUrl>http://localhost:55320</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>

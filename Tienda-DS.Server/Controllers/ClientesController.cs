@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tienda_DS.Server.Models;
+using Tienda_DS.Server.DTOs;
 
 namespace Tienda_DS.Server.Controllers
 {
@@ -16,13 +17,23 @@ namespace Tienda_DS.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
+        public async Task<ActionResult<IEnumerable<ClienteDTO>>> GetClientes()
         {
-            return await _context.Clientes.ToListAsync();
+            var clientes = await _context.Clientes
+                .Select(c => new ClienteDTO
+                {
+                    IdCliente = c.IdCliente,
+                    Nombre = c.Nombre,
+                    NitCedula = c.NitCedula,
+                    IdUsuario = c.IdUsuario
+                })
+                .ToListAsync();
+
+            return clientes;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cliente>> GetCliente(int id)
+        public async Task<ActionResult<ClienteDTO>> GetCliente(int id)
         {
             var cliente = await _context.Clientes.FindAsync(id);
 
@@ -31,27 +42,50 @@ namespace Tienda_DS.Server.Controllers
                 return NotFound();
             }
 
-            return cliente;
+            return new ClienteDTO
+            {
+                IdCliente = cliente.IdCliente,
+                Nombre = cliente.Nombre,
+                NitCedula = cliente.NitCedula,
+                IdUsuario = cliente.IdUsuario
+            };
         }
 
         [HttpPost]
-        public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
+        public async Task<ActionResult<ClienteDTO>> PostCliente(ClienteDTO clienteDto)
         {
+            var cliente = new Cliente
+            {
+                Nombre = clienteDto.Nombre,
+                NitCedula = clienteDto.NitCedula,
+                IdUsuario = clienteDto.IdUsuario
+            };
+
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCliente), new { id = cliente.IdCliente }, cliente);
+            clienteDto.IdCliente = cliente.IdCliente;
+
+            return CreatedAtAction(nameof(GetCliente), new { id = cliente.IdCliente }, clienteDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCliente(int id, Cliente cliente)
+        public async Task<IActionResult> PutCliente(int id, ClienteDTO clienteDto)
         {
-            if (id != cliente.IdCliente)
+            if (id != clienteDto.IdCliente)
             {
                 return BadRequest();
             }
 
-            _context.Entry(cliente).State = EntityState.Modified;
+            var cliente = await _context.Clientes.FindAsync(id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            cliente.Nombre = clienteDto.Nombre;
+            cliente.NitCedula = clienteDto.NitCedula;
+            cliente.IdUsuario = clienteDto.IdUsuario;
 
             try
             {

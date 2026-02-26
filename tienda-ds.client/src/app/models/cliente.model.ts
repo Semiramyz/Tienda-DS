@@ -1,6 +1,6 @@
 export interface Cliente {
-  idCliente: number;
-  nombre: string;
-  nitCedula?: string;
-  idUsuario?: number;
+  IdCliente: number;
+  Nombre: string;
+  NitCedula?: string;
+  IdUsuario?: number;
 }

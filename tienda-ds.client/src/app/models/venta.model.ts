@@ -1,9 +1,9 @@
 export interface Venta {
-  idVenta: number;
-  fecha?: Date;
-  idUsuario?: number;
-  idCliente?: number;
-  idProducto?: number;
-  cantidad: number;
-  totalVenta: number;
+  IdVenta: number;
+  Fecha?: Date;
+  IdUsuario?: number;
+  IdCliente?: number;
+  IdProducto?: number;
+  Cantidad: number;
+  TotalVenta: number;
 }

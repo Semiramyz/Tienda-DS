@@ -24,13 +24,14 @@
       </thead>
       <tbody>
         <tr *ngFor="let venta of ventas">
-          <td>{{ venta.idVenta }}</td>
-          <td>{{ venta.fecha | date }}</td>
-          <td>{{ venta.cantidad }}</td>
-          <td>{{ venta.totalVenta | currency }}</td>
+          <td>{{ venta.IdVenta }}</td>
+          <td>{{ venta.Fecha | date }}</td>
+          <td>{{ venta.Cantidad }}</td>
+          <td>{{ venta.TotalVenta | currency }}</td>
           <td>
-            <button routerLink="/ventas/detalle/{{ venta.idVenta }}">Ver</button>
-            <button (click)="deleteVenta(venta.idVenta)">Eliminar</button>
+            <button class="btn-view" [routerLink]="['/ventas/detalle', venta.IdVenta]">Ver</button>
+            <button class="btn-edit" [routerLink]="['/ventas/editar', venta.IdVenta]">Editar</button>
+            <button class="btn-delete" (click)="deleteVenta(venta.IdVenta)">Eliminar</button>
           </td>
         </tr>
       </tbody>

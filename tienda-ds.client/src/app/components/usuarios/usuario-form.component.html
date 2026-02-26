@@ -1,0 +1,62 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Editar Usuario' : 'Nuevo Usuario' }}</h2>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="NombreUsuario">Nombre de Usuario *</label>
+      <input
+        type="text"
+        id="NombreUsuario"
+        formControlName="NombreUsuario"
+        class="form-control"
+        [class.invalid]="usuarioForm.get('NombreUsuario')?.invalid && usuarioForm.get('NombreUsuario')?.touched"
+      />
+      <div class="error-message" *ngIf="usuarioForm.get('NombreUsuario')?.invalid && usuarioForm.get('NombreUsuario')?.touched">
+        <span *ngIf="usuarioForm.get('NombreUsuario')?.errors?.['required']">El nombre de usuario es requerido</span>
+        <span *ngIf="usuarioForm.get('NombreUsuario')?.errors?.['minlength']">Debe tener al menos 3 caracteres</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="Password">Contraseña {{ isEditMode ? '(dejar en blanco para no cambiar)' : '*' }}</label>
+      <input
+        type="password"
+        id="Password"
+        formControlName="Password"
+        class="form-control"
+        [class.invalid]="usuarioForm.get('Password')?.invalid && usuarioForm.get('Password')?.touched"
+      />
+      <div class="error-message" *ngIf="usuarioForm.get('Password')?.invalid && usuarioForm.get('Password')?.touched">
+        <span *ngIf="usuarioForm.get('Password')?.errors?.['required']">La contraseña es requerida</span>
+        <span *ngIf="usuarioForm.get('Password')?.errors?.['minlength']">Debe tener al menos 6 caracteres</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="Rol">Rol *</label>
+      <select
+        id="Rol"
+        formControlName="Rol"
+        class="form-control"
+        [class.invalid]="usuarioForm.get('Rol')?.invalid && usuarioForm.get('Rol')?.touched"
+      >
+        <option value="">Seleccione un rol</option>
+        <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option>
+      </select>
+      <div class="error-message" *ngIf="usuarioForm.get('Rol')?.invalid && usuarioForm.get('Rol')?.touched">
+        <span *ngIf="usuarioForm.get('Rol')?.errors?.['required']">El rol es requerido</span>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear') }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

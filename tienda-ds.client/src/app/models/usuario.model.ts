@@ -1,6 +1,6 @@
 export interface Usuario {
-  idUsuario: number;
-  nombreUsuario: string;
-  password: string;
-  rol: string;
+  IdUsuario: number;
+  NombreUsuario: string;
+  Password: string;
+  Rol: string;
 }

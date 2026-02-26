@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tienda_DS.Server.Models;
+using Tienda_DS.Server.DTOs;
 
 namespace Tienda_DS.Server.Controllers
 {
@@ -16,13 +17,25 @@ namespace Tienda_DS.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Producto>>> GetProductos()
+        public async Task<ActionResult<IEnumerable<ProductoDTO>>> GetProductos()
         {
-            return await _context.Productos.ToListAsync();
+            var productos = await _context.Productos
+                .Select(p => new ProductoDTO
+                {
+                    IdProducto = p.IdProducto,
+                    NombreProd = p.NombreProd,
+                    PrecioVenta = p.PrecioVenta,
+                    PrecioCompra = p.PrecioCompra,
+                    Stock = p.Stock,
+                    IdProveedor = p.IdProveedor
+                })
+                .ToListAsync();
+
+            return productos;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Producto>> GetProducto(int id)
+        public async Task<ActionResult<ProductoDTO>> GetProducto(int id)
         {
             var producto = await _context.Productos.FindAsync(id);
 
@@ -31,27 +44,56 @@ namespace Tienda_DS.Server.Controllers
                 return NotFound();
             }
 
-            return producto;
+            return new ProductoDTO
+            {
+                IdProducto = producto.IdProducto,
+                NombreProd = producto.NombreProd,
+                PrecioVenta = producto.PrecioVenta,
+                PrecioCompra = producto.PrecioCompra,
+                Stock = producto.Stock,
+                IdProveedor = producto.IdProveedor
+            };
         }
 
         [HttpPost]
-        public async Task<ActionResult<Producto>> PostProducto(Producto producto)
+        public async Task<ActionResult<ProductoDTO>> PostProducto(ProductoDTO productoDto)
         {
+            var producto = new Producto
+            {
+                NombreProd = productoDto.NombreProd,
+                PrecioVenta = productoDto.PrecioVenta,
+                PrecioCompra = productoDto.PrecioCompra,
+                Stock = productoDto.Stock,
+                IdProveedor = productoDto.IdProveedor
+            };
+
             _context.Productos.Add(producto);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProducto), new { id = producto.IdProducto }, producto);
+            productoDto.IdProducto = producto.IdProducto;
+
+            return CreatedAtAction(nameof(GetProducto), new { id = producto.IdProducto }, productoDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProducto(int id, Producto producto)
+        public async Task<IActionResult> PutProducto(int id, ProductoDTO productoDto)
         {
-            if (id != producto.IdProducto)
+            if (id != productoDto.IdProducto)
             {
                 return BadRequest();
             }
 
-            _context.Entry(producto).State = EntityState.Modified;
+            var producto = await _context.Productos.FindAsync(id);
+            if (producto == null)
+            {
+                return NotFound();
+            }
+
+            producto.NombreProd = productoDto.NombreProd;
+            producto.PrecioVenta = productoDto.PrecioVenta;
+            producto.PrecioCompra = productoDto.PrecioCompra;
+            producto.Stock = productoDto.Stock;
+            producto.IdProveedor = productoDto.IdProveedor;
 
             try
             {

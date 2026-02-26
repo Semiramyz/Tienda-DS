@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tienda_DS.Server.Models;
+using Tienda_DS.Server.DTOs;
 
 namespace Tienda_DS.Server.Controllers
 {
@@ -16,13 +17,23 @@ namespace Tienda_DS.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Proveedor>>> GetProveedores()
+        public async Task<ActionResult<IEnumerable<ProveedorDTO>>> GetProveedores()
         {
-            return await _context.Proveedors.ToListAsync();
+            var proveedores = await _context.Proveedors
+                .Select(p => new ProveedorDTO
+                {
+                    IdProveedor = p.IdProveedor,
+                    Empresa = p.Empresa,
+                    Contacto = p.Contacto,
+                    IdUsuario = p.IdUsuario
+                })
+                .ToListAsync();
+
+            return proveedores;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Proveedor>> GetProveedor(int id)
+        public async Task<ActionResult<ProveedorDTO>> GetProveedor(int id)
         {
             var proveedor = await _context.Proveedors.FindAsync(id);
 
@@ -31,27 +42,50 @@ namespace Tienda_DS.Server.Controllers
                 return NotFound();
             }
 
-            return proveedor;
+            return new ProveedorDTO
+            {
+                IdProveedor = proveedor.IdProveedor,
+                Empresa = proveedor.Empresa,
+                Contacto = proveedor.Contacto,
+                IdUsuario = proveedor.IdUsuario
+            };
         }
 
         [HttpPost]
-        public async Task<ActionResult<Proveedor>> PostProveedor(Proveedor proveedor)
+        public async Task<ActionResult<ProveedorDTO>> PostProveedor(ProveedorDTO proveedorDto)
         {
+            var proveedor = new Proveedor
+            {
+                Empresa = proveedorDto.Empresa,
+                Contacto = proveedorDto.Contacto,
+                IdUsuario = proveedorDto.IdUsuario
+            };
+
             _context.Proveedors.Add(proveedor);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProveedor), new { id = proveedor.IdProveedor }, proveedor);
+            proveedorDto.IdProveedor = proveedor.IdProveedor;
+
+            return CreatedAtAction(nameof(GetProveedor), new { id = proveedor.IdProveedor }, proveedorDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProveedor(int id, Proveedor proveedor)
+        public async Task<IActionResult> PutProveedor(int id, ProveedorDTO proveedorDto)
         {
-            if (id != proveedor.IdProveedor)
+            if (id != proveedorDto.IdProveedor)
             {
                 return BadRequest();
             }
 
-            _context.Entry(proveedor).State = EntityState.Modified;
+            var proveedor = await _context.Proveedors.FindAsync(id);
+            if (proveedor == null)
+            {
+                return NotFound();
+            }
+
+            proveedor.Empresa = proveedorDto.Empresa;
+            proveedor.Contacto = proveedorDto.Contacto;
+            proveedor.IdUsuario = proveedorDto.IdUsuario;
 
             try
             {

@@ -23,12 +23,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let factura of facturas">
-          <td>{{ factura.idFactura }}</td>
-          <td>{{ factura.nroFactura }}</td>
-          <td>{{ factura.fechaEmision | date }}</td>
+          <td>{{ factura.IdFactura }}</td>
+          <td>{{ factura.NroFactura }}</td>
+          <td>{{ factura.FechaEmision | date }}</td>
           <td>
-            <button routerLink="/facturas/detalle/{{ factura.idFactura }}">Ver</button>
-            <button (click)="deleteFactura(factura.idFactura)">Eliminar</button>
+            <button routerLink="/facturas/detalle/{{ factura.IdFactura }}">Ver</button>
+            <button (click)="deleteFactura(factura.IdFactura)">Eliminar</button>
           </td>
         </tr>
       </tbody>

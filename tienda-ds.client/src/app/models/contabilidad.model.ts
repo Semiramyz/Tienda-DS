@@ -1,9 +1,9 @@
 export interface Contabilidad {
-  idRegistro: number;
-  tipo: string;
-  monto: number;
-  descripcion?: string;
-  fechaContable?: Date;
-  idVenta?: number;
-  idProveedor?: number;
+  IdRegistro: number;
+  Tipo: string;
+  Monto: number;
+  Descripcion?: string;
+  FechaContable?: Date;
+  IdVenta?: number;
+  IdProveedor?: number;
 }

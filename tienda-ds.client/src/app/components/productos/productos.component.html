@@ -25,14 +25,14 @@
       </thead>
       <tbody>
         <tr *ngFor="let producto of productos">
-          <td>{{ producto.idProducto }}</td>
-          <td>{{ producto.nombreProd }}</td>
-          <td>{{ producto.precioVenta | currency }}</td>
-          <td>{{ producto.precioCompra | currency }}</td>
-          <td>{{ producto.stock }}</td>
+          <td>{{ producto.IdProducto }}</td>
+          <td>{{ producto.NombreProd }}</td>
+          <td>{{ producto.PrecioVenta | currency }}</td>
+          <td>{{ producto.PrecioCompra | currency }}</td>
+          <td>{{ producto.Stock }}</td>
           <td>
-            <button routerLink="/productos/editar/{{ producto.idProducto }}">Editar</button>
-            <button (click)="deleteProducto(producto.idProducto)">Eliminar</button>
+            <button class="btn-edit" [routerLink]="['/productos/editar', producto.IdProducto]">Editar</button>
+            <button class="btn-delete" (click)="deleteProducto(producto.IdProducto)">Eliminar</button>
           </td>
         </tr>
       </tbody>

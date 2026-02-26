@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tienda_DS.Server.Models;
+using Tienda_DS.Server.DTOs;
 
 namespace Tienda_DS.Server.Controllers
 {
@@ -16,50 +17,87 @@ namespace Tienda_DS.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ventum>>> GetVentas()
+        public async Task<ActionResult<IEnumerable<VentaDTO>>> GetVentas()
         {
-            return await _context.Venta
-                .Include(v => v.IdClienteNavigation)
-                .Include(v => v.IdProductoNavigation)
-                .Include(v => v.IdUsuarioNavigation)
+            var ventas = await _context.Venta
+                .Select(v => new VentaDTO
+                {
+                    IdVenta = v.IdVenta,
+                    Fecha = v.Fecha,
+                    IdUsuario = v.IdUsuario,
+                    IdCliente = v.IdCliente,
+                    IdProducto = v.IdProducto,
+                    Cantidad = v.Cantidad,
+                    TotalVenta = v.TotalVenta
+                })
                 .ToListAsync();
+
+            return ventas;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ventum>> GetVenta(int id)
+        public async Task<ActionResult<VentaDTO>> GetVenta(int id)
         {
-            var venta = await _context.Venta
-                .Include(v => v.IdClienteNavigation)
-                .Include(v => v.IdProductoNavigation)
-                .Include(v => v.IdUsuarioNavigation)
-                .FirstOrDefaultAsync(v => v.IdVenta == id);
+            var venta = await _context.Venta.FindAsync(id);
 
             if (venta == null)
             {
                 return NotFound();
             }
 
-            return venta;
+            return new VentaDTO
+            {
+                IdVenta = venta.IdVenta,
+                Fecha = venta.Fecha,
+                IdUsuario = venta.IdUsuario,
+                IdCliente = venta.IdCliente,
+                IdProducto = venta.IdProducto,
+                Cantidad = venta.Cantidad,
+                TotalVenta = venta.TotalVenta
+            };
         }
 
         [HttpPost]
-        public async Task<ActionResult<Ventum>> PostVenta(Ventum venta)
+        public async Task<ActionResult<VentaDTO>> PostVenta(VentaDTO ventaDto)
         {
+            var venta = new Ventum
+            {
+                Fecha = ventaDto.Fecha,
+                IdUsuario = ventaDto.IdUsuario,
+                IdCliente = ventaDto.IdCliente,
+                IdProducto = ventaDto.IdProducto,
+                Cantidad = ventaDto.Cantidad,
+                TotalVenta = ventaDto.TotalVenta
+            };
+
             _context.Venta.Add(venta);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetVenta), new { id = venta.IdVenta }, venta);
+            ventaDto.IdVenta = venta.IdVenta;
+
+            return CreatedAtAction(nameof(GetVenta), new { id = venta.IdVenta }, ventaDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutVenta(int id, Ventum venta)
+        public async Task<IActionResult> PutVenta(int id, VentaDTO ventaDto)
         {
-            if (id != venta.IdVenta)
+            if (id != ventaDto.IdVenta)
             {
                 return BadRequest();
             }
 
-            _context.Entry(venta).State = EntityState.Modified;
+            var venta = await _context.Venta.FindAsync(id);
+            if (venta == null)
+            {
+                return NotFound();
+            }
+
+            venta.Fecha = ventaDto.Fecha;
+            venta.IdUsuario = ventaDto.IdUsuario;
+            venta.IdCliente = ventaDto.IdCliente;
+            venta.IdProducto = ventaDto.IdProducto;
+            venta.Cantidad = ventaDto.Cantidad;
+            venta.TotalVenta = ventaDto.TotalVenta;
 
             try
             {

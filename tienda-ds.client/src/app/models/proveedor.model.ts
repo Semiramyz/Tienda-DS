@@ -1,6 +1,6 @@
 export interface Proveedor {
-  idProveedor: number;
-  empresa: string;
-  contacto?: string;
-  idUsuario?: number;
+  IdProveedor: number;
+  Empresa: string;
+  Contacto?: string;
+  IdUsuario?: number;
 }

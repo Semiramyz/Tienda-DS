@@ -1,0 +1,61 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Editar Proveedor' : 'Nuevo Proveedor' }}</h2>
+
+  <div *ngIf="loading" class="loading">Cargando...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <form [formGroup]="proveedorForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="form-group">
+      <label for="Empresa">Empresa *</label>
+      <input
+        type="text"
+        id="Empresa"
+        formControlName="Empresa"
+        class="form-control"
+        [class.invalid]="proveedorForm.get('Empresa')?.invalid && proveedorForm.get('Empresa')?.touched"
+      />
+      <div class="error-message" *ngIf="proveedorForm.get('Empresa')?.invalid && proveedorForm.get('Empresa')?.touched">
+        <span *ngIf="proveedorForm.get('Empresa')?.errors?.['required']">El nombre de la empresa es requerido</span>
+        <span *ngIf="proveedorForm.get('Empresa')?.errors?.['minlength']">Debe tener al menos 3 caracteres</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="Contacto">Contacto</label>
+      <input
+        type="text"
+        id="Contacto"
+        formControlName="Contacto"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="IdUsuario">Usuario (Rol Proveedor) *</label>
+      <select
+        id="IdUsuario"
+        formControlName="IdUsuario"
+        class="form-control"
+        [class.invalid]="proveedorForm.get('IdUsuario')?.invalid && proveedorForm.get('IdUsuario')?.touched"
+      >
+        <option value="">Seleccione un usuario</option>
+        <option *ngFor="let usuario of usuarios" [value]="usuario.IdUsuario">
+          {{ usuario.NombreUsuario }}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="proveedorForm.get('IdUsuario')?.invalid && proveedorForm.get('IdUsuario')?.touched">
+        <span *ngIf="proveedorForm.get('IdUsuario')?.errors?.['required']">Debe seleccionar un usuario</span>
+      </div>
+      <small>Si no hay usuarios disponibles, primero cree un usuario con rol "Proveedor"</small>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ isEditMode ? 'Actualizar' : 'Crear' }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,61 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Editar Cliente' : 'Nuevo Cliente' }}</h2>
+
+  <div *ngIf="loading" class="loading">Cargando...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="form-group">
+      <label for="Nombre">Nombre *</label>
+      <input
+        type="text"
+        id="Nombre"
+        formControlName="Nombre"
+        class="form-control"
+        [class.invalid]="clienteForm.get('Nombre')?.invalid && clienteForm.get('Nombre')?.touched"
+      />
+      <div class="error-message" *ngIf="clienteForm.get('Nombre')?.invalid && clienteForm.get('Nombre')?.touched">
+        <span *ngIf="clienteForm.get('Nombre')?.errors?.['required']">El nombre es requerido</span>
+        <span *ngIf="clienteForm.get('Nombre')?.errors?.['minlength']">Debe tener al menos 3 caracteres</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="NitCedula">NIT/Cédula</label>
+      <input
+        type="text"
+        id="NitCedula"
+        formControlName="NitCedula"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="IdUsuario">Usuario (Rol Cliente) *</label>
+      <select
+        id="IdUsuario"
+        formControlName="IdUsuario"
+        class="form-control"
+        [class.invalid]="clienteForm.get('IdUsuario')?.invalid && clienteForm.get('IdUsuario')?.touched"
+      >
+        <option value="">Seleccione un usuario</option>
+        <option *ngFor="let usuario of usuarios" [value]="usuario.IdUsuario">
+          {{ usuario.NombreUsuario }}
+        </option>
+      </select>
+      <div class="error-message" *ngIf="clienteForm.get('IdUsuario')?.invalid && clienteForm.get('IdUsuario')?.touched">
+        <span *ngIf="clienteForm.get('IdUsuario')?.errors?.['required']">Debe seleccionar un usuario</span>
+      </div>
+      <small>Si no hay usuarios disponibles, primero cree un usuario con rol "Cliente"</small>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ isEditMode ? 'Actualizar' : 'Crear' }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
