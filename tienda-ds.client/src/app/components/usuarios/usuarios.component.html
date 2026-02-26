@@ -3,16 +3,14 @@
 
   <button class="btn-primary" routerLink="/usuarios/nuevo">Nuevo Usuario</button>
 
-  <div *ngIf="loading" class="loading">
-    <p>Cargando usuarios...</p>
-  </div>
+  <p *ngIf="loading && usuarios.length === 0" class="loading">Cargando usuarios...</p>
 
   <div *ngIf="error" class="error">
     <p>{{ error }}</p>
     <button class="btn-primary" (click)="loadUsuarios()">Reintentar</button>
   </div>
 
-  <table *ngIf="!loading && usuarios.length > 0">
+  <table *ngIf="usuarios.length > 0">
     <thead>
       <tr>
         <th>ID</th>

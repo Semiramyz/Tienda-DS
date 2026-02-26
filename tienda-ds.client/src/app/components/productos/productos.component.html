@@ -1,43 +1,80 @@
 <div class="productos-container">
   <h2>Gestión de Productos</h2>
 
-  <div *ngIf="loading" class="loading">
-    <p>Cargando productos...</p>
+  <div class="actions-bar">
+    <button class="btn-primary" routerLink="/productos/nuevo">Nuevo Producto</button>
+    <button class="btn-primary" (click)="toggleInventario()">
+      {{ showInventario ? '📋 Ver Lista' : '📊 Inventario' }}
+    </button>
   </div>
+
+  <p *ngIf="loading && productos.length === 0" class="loading">Cargando productos...</p>
 
   <div *ngIf="error" class="error">
     <p>{{ error }}</p>
+    <button class="btn-primary" (click)="loadProductos()">Reintentar</button>
   </div>
 
-  <div *ngIf="!loading && !error">
-    <button class="btn-primary" routerLink="/productos/nuevo">Nuevo Producto</button>
+  <!-- Vista Lista -->
+  <table *ngIf="!showInventario && productos.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio Venta</th>
+        <th>Precio Compra</th>
+        <th>Stock</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productos">
+        <td>{{ producto.IdProducto }}</td>
+        <td>{{ producto.NombreProd }}</td>
+        <td>{{ producto.PrecioVenta | currency }}</td>
+        <td>{{ producto.PrecioCompra | currency }}</td>
+        <td>{{ producto.Stock }}</td>
+        <td>
+          <button class="btn-edit" [routerLink]="['/productos/editar', producto.IdProducto]">Editar</button>
+          <button class="btn-delete" (click)="deleteProducto(producto.IdProducto)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <table *ngIf="productos.length > 0">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Precio Venta</th>
-          <th>Precio Compra</th>
-          <th>Stock</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let producto of productos">
-          <td>{{ producto.IdProducto }}</td>
-          <td>{{ producto.NombreProd }}</td>
-          <td>{{ producto.PrecioVenta | currency }}</td>
-          <td>{{ producto.PrecioCompra | currency }}</td>
-          <td>{{ producto.Stock }}</td>
-          <td>
-            <button class="btn-edit" [routerLink]="['/productos/editar', producto.IdProducto]">Editar</button>
-            <button class="btn-delete" (click)="deleteProducto(producto.IdProducto)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p *ngIf="productos.length === 0">No hay productos registrados.</p>
+  <!-- Vista Inventario -->
+  <div *ngIf="showInventario && productos.length > 0" class="inventario-view">
+    <div *ngFor="let group of inventarioGroups" class="inventario-group">
+      <h3>🏭 {{ group.proveedor }}</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Stock</th>
+            <th>P. Compra</th>
+            <th>P. Venta</th>
+            <th>Valor en Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of group.productos" [class.low-stock]="(p.Stock || 0) < 5">
+            <td>{{ p.NombreProd }}</td>
+            <td>
+              <span class="stock-badge" [class.stock-low]="(p.Stock || 0) < 5" [class.stock-ok]="(p.Stock || 0) >= 5">
+                {{ p.Stock || 0 }}
+              </span>
+            </td>
+            <td>{{ p.PrecioCompra | currency }}</td>
+            <td>{{ p.PrecioVenta | currency }}</td>
+            <td>{{ (p.Stock || 0) * p.PrecioCompra | currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="inventario-total">
+      <strong>Total productos: {{ productos.length }} | Valor total en stock: {{ totalInventario | currency }}</strong>
+    </div>
   </div>
+
+  <p *ngIf="!loading && !error && productos.length === 0">No hay productos registrados.</p>
 </div>

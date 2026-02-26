@@ -1,10 +1,9 @@
 <div class="form-container">
   <h2>{{ isEditMode ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
 
-  <div *ngIf="loading" class="loading">Cargando...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
 
-  <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+  <form [formGroup]="productoForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="NombreProd">Nombre del Producto *</label>
       <input
@@ -23,14 +22,8 @@
     <div class="form-row">
       <div class="form-group">
         <label for="PrecioVenta">Precio de Venta *</label>
-        <input
-          type="number"
-          id="PrecioVenta"
-          formControlName="PrecioVenta"
-          class="form-control"
-          step="0.01"
-          [class.invalid]="productoForm.get('PrecioVenta')?.invalid && productoForm.get('PrecioVenta')?.touched"
-        />
+        <input type="number" id="PrecioVenta" formControlName="PrecioVenta" class="form-control" step="0.01"
+          [class.invalid]="productoForm.get('PrecioVenta')?.invalid && productoForm.get('PrecioVenta')?.touched" />
         <div class="error-message" *ngIf="productoForm.get('PrecioVenta')?.invalid && productoForm.get('PrecioVenta')?.touched">
           <span *ngIf="productoForm.get('PrecioVenta')?.errors?.['required']">El precio de venta es requerido</span>
           <span *ngIf="productoForm.get('PrecioVenta')?.errors?.['min']">Debe ser mayor o igual a 0</span>
@@ -39,14 +32,8 @@
 
       <div class="form-group">
         <label for="PrecioCompra">Precio de Compra *</label>
-        <input
-          type="number"
-          id="PrecioCompra"
-          formControlName="PrecioCompra"
-          class="form-control"
-          step="0.01"
-          [class.invalid]="productoForm.get('PrecioCompra')?.invalid && productoForm.get('PrecioCompra')?.touched"
-        />
+        <input type="number" id="PrecioCompra" formControlName="PrecioCompra" class="form-control" step="0.01"
+          [class.invalid]="productoForm.get('PrecioCompra')?.invalid && productoForm.get('PrecioCompra')?.touched" />
         <div class="error-message" *ngIf="productoForm.get('PrecioCompra')?.invalid && productoForm.get('PrecioCompra')?.touched">
           <span *ngIf="productoForm.get('PrecioCompra')?.errors?.['required']">El precio de compra es requerido</span>
           <span *ngIf="productoForm.get('PrecioCompra')?.errors?.['min']">Debe ser mayor o igual a 0</span>
@@ -56,40 +43,23 @@
 
     <div class="form-group">
       <label for="Stock">Stock</label>
-      <input
-        type="number"
-        id="Stock"
-        formControlName="Stock"
-        class="form-control"
-        [class.invalid]="productoForm.get('Stock')?.invalid && productoForm.get('Stock')?.touched"
-      />
-      <div class="error-message" *ngIf="productoForm.get('Stock')?.invalid && productoForm.get('Stock')?.touched">
-        <span *ngIf="productoForm.get('Stock')?.errors?.['min']">Debe ser mayor o igual a 0</span>
-      </div>
+      <input type="number" id="Stock" formControlName="Stock" class="form-control" />
     </div>
 
     <div class="form-group">
-      <label for="IdProveedor">Proveedor *</label>
-      <select
-        id="IdProveedor"
-        formControlName="IdProveedor"
-        class="form-control"
-        [class.invalid]="productoForm.get('IdProveedor')?.invalid && productoForm.get('IdProveedor')?.touched"
-      >
-        <option value="">Seleccione un proveedor</option>
+      <label for="IdProveedor">Proveedor</label>
+      <select id="IdProveedor" formControlName="IdProveedor" class="form-control">
+        <option value="">Sin proveedor</option>
         <option *ngFor="let proveedor of proveedores" [value]="proveedor.IdProveedor">
           {{ proveedor.Empresa }}
         </option>
       </select>
-      <div class="error-message" *ngIf="productoForm.get('IdProveedor')?.invalid && productoForm.get('IdProveedor')?.touched">
-        <span *ngIf="productoForm.get('IdProveedor')?.errors?.['required']">Debe seleccionar un proveedor</span>
-      </div>
-      <small>Si no hay proveedores disponibles, primero cree uno en la sección de Proveedores</small>
+      <small>Opcional</small>
     </div>
 
     <div class="form-actions">
       <button type="submit" class="btn btn-primary" [disabled]="loading">
-        {{ isEditMode ? 'Actualizar' : 'Crear' }}
+        {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear') }}
       </button>
       <button type="button" class="btn btn-secondary" (click)="onCancel()">
         Cancelar

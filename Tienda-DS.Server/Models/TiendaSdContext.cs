@@ -199,7 +199,7 @@ public partial class TiendaSdContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("password");
             entity.Property(e => e.Rol)
-                .HasColumnType("enum('admin','vendedor','comprador')")
+                .HasColumnType("enum('admin','proveedor','comprador')")
                 .HasColumnName("rol");
         });
 

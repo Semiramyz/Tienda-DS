@@ -17,7 +17,7 @@ export class UsuarioFormComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  roles = ['admin', 'vendedor', 'comprador'];
+  roles = ['admin', 'proveedor', 'comprador'];
 
   constructor(
     private fb: FormBuilder,

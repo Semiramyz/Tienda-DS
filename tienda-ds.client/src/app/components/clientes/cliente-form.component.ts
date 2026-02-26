@@ -30,7 +30,7 @@ export class ClienteFormComponent implements OnInit {
     this.clienteForm = this.fb.group({
       Nombre: ['', [Validators.required, Validators.minLength(3)]],
       NitCedula: [''],
-      IdUsuario: ['', Validators.required]
+      IdUsuario: ['']
     });
   }
 
@@ -48,7 +48,7 @@ export class ClienteFormComponent implements OnInit {
   loadUsuarios(): void {
     this.usuarioService.getAll().subscribe({
       next: (usuarios) => {
-        this.usuarios = usuarios.filter(u => u.Rol === 'Cliente');
+        this.usuarios = usuarios.filter(u => u.Rol === 'comprador');
       },
       error: (err) => {
         console.error('Error al cargar usuarios', err);

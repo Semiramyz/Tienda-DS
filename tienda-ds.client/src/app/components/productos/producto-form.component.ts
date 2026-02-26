@@ -32,7 +32,7 @@ export class ProductoFormComponent implements OnInit {
       PrecioVenta: ['', [Validators.required, Validators.min(0)]],
       PrecioCompra: ['', [Validators.required, Validators.min(0)]],
       Stock: [0, [Validators.min(0)]],
-      IdProveedor: ['', Validators.required]
+      IdProveedor: ['']
     });
   }
 

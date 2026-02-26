@@ -1,47 +1,50 @@
 <div class="home-container">
-  <h1>Bienvenido al {{ title }}</h1>
+  <div class="welcome-banner">
+    <h1>Bienvenido al Sistema de Gestión</h1>
+    <p>Administra tu tienda de manera fácil y eficiente</p>
+  </div>
 
   <div class="cards-grid">
-    <div class="card">
+    <a routerLink="/productos" class="card">
+      <div class="card-icon">📦</div>
       <h3>Productos</h3>
       <p>Gestione el inventario de productos</p>
-      <a routerLink="/productos" class="btn">Ver Productos</a>
-    </div>
+    </a>
 
-    <div class="card">
+    <a routerLink="/clientes" class="card">
+      <div class="card-icon">👥</div>
       <h3>Clientes</h3>
       <p>Administre la información de clientes</p>
-      <a routerLink="/clientes" class="btn">Ver Clientes</a>
-    </div>
+    </a>
 
-    <div class="card">
+    <a routerLink="/ventas" class="card">
+      <div class="card-icon">🛒</div>
       <h3>Ventas</h3>
       <p>Registre y consulte ventas</p>
-      <a routerLink="/ventas" class="btn">Ver Ventas</a>
-    </div>
+    </a>
 
-    <div class="card">
+    <a routerLink="/proveedores" class="card">
+      <div class="card-icon">🏭</div>
       <h3>Proveedores</h3>
       <p>Gestione sus proveedores</p>
-      <a routerLink="/proveedores" class="btn">Ver Proveedores</a>
-    </div>
+    </a>
 
-    <div class="card">
+    <a routerLink="/usuarios" class="card">
+      <div class="card-icon">👤</div>
       <h3>Usuarios</h3>
       <p>Administre los usuarios del sistema</p>
-      <a routerLink="/usuarios" class="btn">Ver Usuarios</a>
-    </div>
+    </a>
 
-    <div class="card">
+    <a routerLink="/facturas" class="card">
+      <div class="card-icon">🧾</div>
       <h3>Facturas</h3>
       <p>Consulte las facturas generadas</p>
-      <a routerLink="/facturas" class="btn">Ver Facturas</a>
-    </div>
+    </a>
 
-    <div class="card">
+    <a routerLink="/contabilidad" class="card">
+      <div class="card-icon">📊</div>
       <h3>Contabilidad</h3>
       <p>Revise los registros contables</p>
-      <a routerLink="/contabilidad" class="btn">Ver Contabilidad</a>
-    </div>
+    </a>
   </div>
 </div>

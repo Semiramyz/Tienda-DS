@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Producto } from '../../models/producto.model';
+import { Proveedor } from '../../models/proveedor.model';
 import { ProductoService } from '../../services/producto.service';
+import { ProveedorService } from '../../services/proveedor.service';
+
+interface InventarioGroup {
+  proveedor: string;
+  productos: Producto[];
+}
 
 @Component({
   selector: 'app-productos',
@@ -10,13 +17,24 @@ import { ProductoService } from '../../services/producto.service';
 })
 export class ProductosComponent implements OnInit {
   productos: Producto[] = [];
+  proveedores: Proveedor[] = [];
   loading = false;
   error: string | null = null;
+  showInventario = false;
+  inventarioGroups: InventarioGroup[] = [];
+  totalInventario = 0;
 
-  constructor(private productoService: ProductoService) {}
+  constructor(
+    private productoService: ProductoService,
+    private proveedorService: ProveedorService
+  ) {}
 
   ngOnInit(): void {
     this.loadProductos();
+    this.proveedorService.getAll().subscribe({
+      next: (data) => this.proveedores = data,
+      error: () => {}
+    });
   }
 
   loadProductos(): void {
@@ -25,6 +43,7 @@ export class ProductosComponent implements OnInit {
     this.productoService.getAll().subscribe({
       next: (data) => {
         this.productos = data;
+        this.buildInventario();
         this.loading = false;
       },
       error: (err) => {
@@ -33,6 +52,30 @@ export class ProductosComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  toggleInventario(): void {
+    this.showInventario = !this.showInventario;
+    if (this.showInventario) {
+      this.buildInventario();
+    }
+  }
+
+  buildInventario(): void {
+    const groups = new Map<string, Producto[]>();
+    for (const p of this.productos) {
+      const prov = this.proveedores.find(pr => pr.IdProveedor === p.IdProveedor);
+      const name = prov ? prov.Empresa : 'Sin proveedor';
+      if (!groups.has(name)) {
+        groups.set(name, []);
+      }
+      groups.get(name)!.push(p);
+    }
+    this.inventarioGroups = Array.from(groups.entries()).map(([proveedor, productos]) => ({
+      proveedor,
+      productos
+    }));
+    this.totalInventario = this.productos.reduce((sum, p) => sum + (p.Stock || 0) * p.PrecioCompra, 0);
   }
 
   deleteProducto(id: number): void {

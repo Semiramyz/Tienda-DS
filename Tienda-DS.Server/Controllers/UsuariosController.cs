@@ -80,7 +80,7 @@ namespace Tienda_DS.Server.Controllers
             try
             {
                 // Validar que el rol sea válido
-                var rolesValidos = new[] { "admin", "vendedor", "comprador" };
+                var rolesValidos = new[] { "admin", "proveedor", "comprador" };
                 if (!rolesValidos.Contains(usuarioDto.Rol?.ToLower()))
                 {
                     return BadRequest(new { message = $"Rol inválido '{usuarioDto.Rol}'. Roles válidos: {string.Join(", ", rolesValidos)}" });
@@ -120,7 +120,7 @@ namespace Tienda_DS.Server.Controllers
                 return BadRequest(new { message = "ID mismatch" });
             }
 
-            var rolesValidos = new[] { "admin", "vendedor", "comprador" };
+            var rolesValidos = new[] { "admin", "proveedor", "comprador" };
             if (!rolesValidos.Contains(usuarioDto.Rol?.ToLower()))
             {
                 return BadRequest(new { message = $"Rol inválido '{usuarioDto.Rol}'. Roles válidos: {string.Join(", ", rolesValidos)}" });

@@ -1,18 +1,23 @@
-  <div class="container">
-    <h1>{{ title }}</h1>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>🛍️ Tienda DS</h2>
+      </div>
+      <nav>
+        <ul>
+          <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">🏠 Inicio</a></li>
+          <li><a routerLink="/productos" routerLinkActive="active">📦 Productos</a></li>
+          <li><a routerLink="/clientes" routerLinkActive="active">👥 Clientes</a></li>
+          <li><a routerLink="/proveedores" routerLinkActive="active">🏭 Proveedores</a></li>
+          <li><a routerLink="/ventas" routerLinkActive="active">🛒 Ventas</a></li>
+          <li><a routerLink="/facturas" routerLinkActive="active">🧾 Facturas</a></li>
+          <li><a routerLink="/usuarios" routerLinkActive="active">👤 Usuarios</a></li>
+          <li><a routerLink="/contabilidad" routerLinkActive="active">📊 Contabilidad</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-    <nav>
-      <ul>
-        <li><a routerLink="/">Inicio</a></li>
-        <li><a routerLink="/productos">Productos</a></li>
-        <li><a routerLink="/clientes">Clientes</a></li>
-        <li><a routerLink="/proveedores">Proveedores</a></li>
-        <li><a routerLink="/ventas">Ventas</a></li>
-        <li><a routerLink="/facturas">Facturas</a></li>
-        <li><a routerLink="/usuarios">Usuarios</a></li>
-        <li><a routerLink="/contabilidad">Contabilidad</a></li>
-      </ul>
-    </nav>
-
-    <router-outlet></router-outlet>
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
   </div>

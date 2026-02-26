@@ -1,69 +1,69 @@
 .home-container {
-  padding: 20px;
+  padding: 0;
+}
+
+.welcome-banner {
+  background: linear-gradient(135deg, #f8c8d8 0%, #e8a0c0 100%);
+  padding: 40px 32px;
+  border-radius: 16px;
+  margin-bottom: 32px;
   text-align: center;
 }
 
-h1 {
-  color: #333;
-  margin-bottom: 40px;
+.welcome-banner h1 {
+  color: #5a1838;
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  border: none;
+  padding: 0;
+}
+
+.welcome-banner p {
+  color: #7a3858;
+  font-size: 1.05rem;
 }
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 18px;
 }
 
 .card {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 20px;
-  transition: transform 0.3s;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 24px 20px;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  text-align: center;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  display: block;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(200, 100, 140, 0.15);
+  border-color: #f0b0c8;
 }
 
-.card h3 {
-  color: #2196F3;
+.card-icon {
+  font-size: 2.2rem;
   margin-bottom: 10px;
 }
 
+.card h3 {
+  color: #6b2040;
+  margin-bottom: 6px;
+  font-size: 1rem;
+  border: none;
+  padding: 0;
+}
+
 .card p {
-  color: #666;
-  margin-bottom: 15px;
-}
-
-.card button {
-  background-color: #2196F3;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.card button:hover {
-  background-color: #0b7dda;
-}
-
-.card .btn {
-  background-color: #2196F3;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.card .btn:hover {
-  background-color: #0b7dda;
+  color: #9a7080;
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.4;
 }
